@@ -26,59 +26,74 @@ const MiniCaption = styled.p`
   font-family: monospace;
 `
 
+const Cell = styled.div`
+  padding: 18px;
+`
+
 const City = () => {
-  
   return (
     <>
-       
-      <Info> 
-        <div>
-          <div><Icon icon={cloudyIcon} /></div>
+      <Info>
+        <Cell>
+          <div>
+            <Icon icon={cloudyIcon} />
+          </div>
           <div>Cloudy</div>
-        </div>
-        <div>
-          <h1>29<InlineIcon icon={celsiusIcon} /></h1> 
-        </div>
-        <div>
-          <div>35<InlineIcon icon={celsiusIcon} /><InlineIcon icon={upIcon} /></div>
-          <div>27<InlineIcon icon={celsiusIcon} /><InlineIcon icon={downIcon} /></div>
-        </div>
-        <div>
-          <div><Icon icon={humidityIcon} width={35} /></div>
+        </Cell>
+        <Cell>
+          <h1>
+            29
+            <InlineIcon icon={celsiusIcon} />
+          </h1>
+        </Cell>
+        <Cell>
+          <div>
+            35
+            <InlineIcon icon={celsiusIcon} />
+            <InlineIcon icon={upIcon} />
+          </div>
+          <div>
+            27
+            <InlineIcon icon={celsiusIcon} />
+            <InlineIcon icon={downIcon} />
+          </div>
+        </Cell>
+        <Cell>
+          <div>
+            <Icon icon={humidityIcon} />
+          </div>
           <div>73%</div>
           <MiniCaption>Humidity</MiniCaption>
-        </div>
-        <div> 
+        </Cell>
+        <Cell>
           <Icon icon={barometerIcon} />
           <div>1,009 mBar</div>
           <MiniCaption>Pressure</MiniCaption>
-        </div>
-        <div> 
+        </Cell>
+        <Cell>
           <Icon icon={windIcon} />
           <div>11 km/h</div>
           <MiniCaption>Wind</MiniCaption>
-        </div>
-        <div> 
+        </Cell>
+        <Cell>
           <Icon icon={sunriseIcon} />
           <div>6:03 AM</div>
           <MiniCaption>Sunrise</MiniCaption>
-        </div>
-        <div>
+        </Cell>
+        <Cell>
           <Icon icon={sunsetIcon} />
           <div>7:05 PM</div>
           <MiniCaption>Sunset</MiniCaption>
-        </div>
-        <div> 
-          <Icon icon={timeIcon}/>
+        </Cell>
+        <Cell>
+          <Icon icon={timeIcon} />
           <div>13h 1m</div>
           <MiniCaption>Daytime</MiniCaption>
-        </div>
+        </Cell>
       </Info>
       <Week />
     </>
   )
-    
-  
 }
 
 export default City

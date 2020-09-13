@@ -1,7 +1,7 @@
 import React from 'react'
-import { useStore } from 'effector-react'
 import styled from 'styled-components'
 import { Icon, InlineIcon } from '@iconify/react'
+
 import daySunny from '@iconify/icons-wi/day-sunny'
 import cloudyIcon from '@iconify/icons-wi/cloudy'
 import cloudyGusts from '@iconify/icons-wi/cloudy-gusts'
@@ -27,23 +27,27 @@ import celsiusIcon from '@iconify/icons-wi/celsius'
 import upIcon from '@iconify/icons-wi/direction-up'
 import downIcon from '@iconify/icons-wi/direction-down'
 
+import Temperature from './Temperature'
 
 const StyledDay = styled.div`
   display: inline-block;
   border-radius: 16px;
   background: #fff;
+  border: 1px solid red;
   box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 300px;
 `
 
-const Week = () => {
-  
-  return (
-    <div>
-      <StyledDay> 
-        <Icon icon={dayHail} width={50} />
-      </StyledDay>
-    </div>
-  )
-}
+const Day = ({ title, date, max, min }) => (
+  <StyledDay>
+    <Icon icon={daySunny} />
+    <p>
+      {title}, {date}
+    </p>
+    <Temperature value={max} monospace up />
+    <Temperature value={min} monospace />
+  </StyledDay>
+)
 
-export default Week
+export default Day

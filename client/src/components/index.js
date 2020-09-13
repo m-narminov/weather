@@ -1,10 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import City from './Container/City'
+import City from './City'
 
 const StyledContainer = styled.div`
-  margin-top: -50px;
+  z-index: 10;
+  margin-top: -80px;
   position: relative;
   background: #fff;
   border: 1px solid green;
@@ -13,8 +14,11 @@ const StyledContainer = styled.div`
 `
 
 const Container = () => {
-  
-  return <StyledContainer><City /></StyledContainer>
+  return (
+    <StyledContainer>
+      <City />
+    </StyledContainer>
+  )
 }
 
 export default Container
