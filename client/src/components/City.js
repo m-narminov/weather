@@ -11,7 +11,6 @@ import cloudyIcon from '@iconify/icons-wi/cloudy'
 import downIcon from '@iconify/icons-wi/direction-down'
 import upIcon from '@iconify/icons-wi/direction-up'
 import timeIcon from '@iconify/icons-wi/time-8'
-import postalCodeIcon from '@iconify/icons-map/postal-code'
 
 import Week from './Week'
 import Header from './Header'

@@ -1,10 +1,12 @@
 import React from 'react'
+import { InlineIcon } from '@iconify/react'
 import styled from 'styled-components'
 import { format } from 'date-fns'
+import postalCodeIcon from '@iconify/icons-map/postal-code'
 
 import { searchEvent } from '../store'
 
-const StyledParagraph = styled.p`
+const StyledParagraph = styled.div`
   text-align: justify;
   padding: 0 12px;
 `
@@ -24,7 +26,9 @@ const Header = () => {
   return (
     <StyledParagraph>
       {nowString}{' '}
-      <Location onClick={() => searchEvent()}>Mumbai, India</Location>
+      <Location onClick={() => searchEvent()}>
+        Mumbai, India <InlineIcon icon={postalCodeIcon} />
+      </Location>
     </StyledParagraph>
   )
 }

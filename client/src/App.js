@@ -1,9 +1,10 @@
-import React from 'react'
-import logo from './logo.svg'
+import React, { useEffect } from 'react'
+import styled from 'styled-components'
+import { useStore } from 'effector-react'
+
+import { $currentCity, appInit } from './store'
 import './App.css'
 import dayImg from './day.png'
-
-import styled from 'styled-components'
 import Container from './components'
 
 const Background = styled.img`
@@ -18,6 +19,13 @@ const DayCard = styled.div`
 `
 
 function App() {
+  const currentCity = useStore($currentCity)
+  useEffect(() => {
+    appInit()
+    return () => {
+      localStorage.setItem('currentCity', currentCity)
+    }
+  }, [])
   return (
     <div className="App">
       <Background src={dayImg} />

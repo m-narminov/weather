@@ -8,12 +8,11 @@ import { $searchMode } from '../store'
 
 const StyledContainer = styled.div`
   z-index: 10;
-  margin-top: -80px;
+  margin-top: -100px;
   position: relative;
   /* position: fixed; */
   bottom: 0;
   background: #fff;
-  /* max-width: 720px; */
   border-top-left-radius: 32px;
   border-top-right-radius: 32px;
   box-shadow: 0px -16px 40px rgba(0, 0, 0, 0.2);
