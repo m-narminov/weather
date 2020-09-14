@@ -14,7 +14,7 @@ import timeIcon from '@iconify/icons-wi/time-8'
 import postalCodeIcon from '@iconify/icons-map/postal-code'
 
 import Week from './Week'
-
+import Header from './Header'
 const Info = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -23,24 +23,25 @@ const Info = styled.div`
 
 const MiniCaption = styled.p`
   font-size: 12px;
-  font-family: monospace;
 `
 
 const Cell = styled.div`
-  padding: 18px;
+  color: ${(props) => (props.main ? '#000' : '#444')};
+  /* padding: 18px; */
 `
 
 const City = () => {
   return (
     <>
+      <Header />
       <Info>
-        <Cell>
+        <Cell main>
           <div>
             <Icon icon={cloudyIcon} />
           </div>
           <div>Cloudy</div>
         </Cell>
-        <Cell>
+        <Cell main>
           <h1>
             29
             <InlineIcon icon={celsiusIcon} />

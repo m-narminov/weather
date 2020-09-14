@@ -33,10 +33,9 @@ const StyledDay = styled.div`
   display: inline-block;
   border-radius: 16px;
   background: #fff;
-  border: 1px solid red;
   box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);
+  color: #444;
   padding: 20px;
-  width: 300px;
 `
 
 const Day = ({ title, date, max, min }) => (
@@ -46,6 +45,7 @@ const Day = ({ title, date, max, min }) => (
       {title}, {date}
     </p>
     <Temperature value={max} monospace up />
+    &nbsp;
     <Temperature value={min} monospace />
   </StyledDay>
 )

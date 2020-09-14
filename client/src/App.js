@@ -1,6 +1,6 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import logo from './logo.svg'
+import './App.css'
 import dayImg from './day.png'
 
 import styled from 'styled-components'
@@ -20,10 +20,10 @@ const DayCard = styled.div`
 function App() {
   return (
     <div className="App">
-      <Background src={dayImg}/>
+      <Background src={dayImg} />
       <Container />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

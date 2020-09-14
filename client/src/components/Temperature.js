@@ -7,14 +7,16 @@ import downIcon from '@iconify/icons-wi/direction-down'
 
 const StyledSpan = styled.span`
   font-size: ${(props) => props.size};
-  font-family: ${(props) => (props.monospace ? 'monospace' : 'Barlow')};
+  letter-spacing: 0.1em;
+  color: #999;
 `
 
-const Temperature = ({ value, monospace, size, up }) => {
+const Temperature = ({ value, size, up }) => {
   return (
-    <StyledSpan monospace={monospace} size={size}>
+    <StyledSpan size={size}>
       {value}
       <InlineIcon icon={celsiusIcon} />
+      &nbsp;
       <InlineIcon icon={up ? upIcon : downIcon} />
     </StyledSpan>
   )

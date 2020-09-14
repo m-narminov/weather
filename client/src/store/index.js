@@ -1,30 +1,16 @@
-import { createStore, createEffect } from 'effector'
+import { createStore, createEffect, createEvent, serialize } from 'effector'
 import axios from 'axios'
 
 const apiKey = '330216f9e3042b8a57a7865c3de67865'
 
-export const $weekDays = createStore({
-  ru: {
-    0: 'Понедельник',
-    1: 'Вторник',
-    2: 'Среда',
-    3: 'Четверг',
-    4: 'Пятница',
-    5: 'Суббота',
-    6: 'Воскресенье',
-  },
-  en: {
-    0: 'Monday',
-    1: 'Tuesday',
-    2: 'Wednesday',
-    3: 'Thursday',
-    4: 'Friday',
-    5: 'Saturday',
-    6: 'Sunday',
-  },
-})
+export const $searchMode = createStore(false)
 export const $currentCity = createStore({})
 export const $currentWeek = createStore([])
+
+export const searchEvent = createEvent('Search city event')
+export const selectCityEvent = createEvent('Select city')
+
+$searchMode.on(searchEvent, () => true).on(selectCityEvent, () => false)
 
 const loadFx = createEffect({
   handler: async ({ cityName }) => {
