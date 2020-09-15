@@ -2,13 +2,16 @@ import { createStore, createEffect, createEvent } from 'effector'
 import axios from 'axios'
 
 const apiKey = '330216f9e3042b8a57a7865c3de67865'
+const weatherURL = 'https://api.openweathermap.org/data/2.5/weather'
 
 export const appInit = createEvent('Init app')
 
 export const $searchMode = createStore(false)
-export const $currentCity = createStore(null)
+export const $currentCity = createStore('Minsk')
+export const $currentCityObject = createStore(null)
 export const $currentWeek = createStore([])
 export const $searchString = createStore('')
+export const $cancelToken = createStore(null)
 
 // group by city name
 export const $cities = createStore([
@@ -40,26 +43,55 @@ export const $cities = createStore([
 export const searchEvent = createEvent('Search city event')
 export const selectCityEvent = createEvent('Select city')
 export const changeSearchString = createEvent('Change search string')
+export const setCancelToken = createEvent('Set cancel token')
 
 const setCitiesFromLocalstorege = createEvent('Set cities from localstorage')
-const setCurrentCityFromLocalstorege = createEvent(
-  'Set current city from localstorage'
-)
+// const setCurrentCityFromLocalstorege = createEvent(
+//   'Set current city from localstorage'
+// )
+
+$cancelToken.on(setCancelToken, (_, newToken) => newToken)
 
 export const searchCityFx = createEffect({
   handler: async ({ cityName }) => {
-    const res = await axios.get(
-      `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`
-    )
-    console.log(res.data)
-    return res.data
+    if (cityName !== '') {
+      console.log('search city fx if city name ')
+      if ($cancelToken.getState()) {
+        $cancelToken.getState().cancel()
+      }
+      // Create a new CancelToken
+      setCancelToken(axios.CancelToken.source())
+      try {
+        const res = await axios.get(
+          `${weatherURL}?q=${cityName}&appid=${apiKey}&units=metric`,
+          { cancelToken: $cancelToken.getState() }
+        )
+        console.log('search city fx ', res.data)
+        return res.data
+      } catch (error) {
+        if (axios.isCancel(error)) {
+          // Handle if request was cancelled
+          console.log('Request canceled', error.message)
+        } else {
+          // Handle usual errors
+          console.log('Something went wrong: ', error.message)
+        }
+      }
+    }
   },
 })
 
-const getCityInfoFx = createEffect({
+export const getCityInfoFx = createEffect({
   handler: async () => {
-    const res = await axios.get()
-    return res.data
+    try {
+      const res = await axios.get(
+        `${weatherURL}?q=${$currentCity.getState()}&appid=${apiKey}&units=metric`
+      )
+      console.log(res.data)
+      return res.data
+    } catch (error) {
+      console.error('get city info fx ', error.message)
+    }
   },
 })
 
@@ -67,9 +99,58 @@ $searchMode.on(searchEvent, () => true).on(selectCityEvent, () => false)
 
 $cities
   .on(setCitiesFromLocalstorege, (_, citiesFromLs) => citiesFromLs)
-  .on(searchCityFx, (_, foundCity) => [..._, foundCity])
+  .on(searchCityFx.done, (_, foundCity) => {
+    const id = foundCity.sys.id
+    const title = foundCity.name
+    const country = foundCity.sys.country
+    const temperature = foundCity.main.temp
+
+    return [
+      ..._,
+      {
+        id,
+        title,
+        country,
+        temperature,
+      },
+    ]
+  })
 
 $searchString.on(changeSearchString, (_, newString) => newString)
+
+$currentCityObject.on(getCityInfoFx.done, (_, { result }) => {
+  const weatherDescription = result.weather[0].main || 'no weather'
+  const sunrise = new Date(result.sys.sunrise * 1000)
+  const sunset = new Date(result.sys.sunset * 1000)
+  const sunriseMinutes = sunrise.getMinutes()
+  const sunsetMinutes = sunset.getMinutes()
+  const daytime = `${
+    sunset.getHours() -
+    sunrise.getHours() -
+    (sunsetMinutes < sunriseMinutes ? 1 : 0)
+  }h ${
+    (sunsetMinutes < sunriseMinutes ? 60 : 0) +
+    sunset.getMinutes() -
+    sunrise.getMinutes()
+  }m`
+
+  return {
+    daytime,
+    sunrise,
+    sunset,
+    country: result.sys.country,
+    humidity: result.main.humidity,
+    id: result.sys.id,
+    maxTemperature: result.main.temp_max,
+    minTemperature: result.main.temp_min,
+    pressure: result.main.pressure,
+    temperature: result.main.temp,
+    title: result.name,
+    timezone: result.timezone,
+    weatherDescription,
+    wind: result.wind.speed,
+  }
+})
 
 appInit.watch(() => {
   try {

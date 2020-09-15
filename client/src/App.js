@@ -13,10 +13,10 @@ const Background = styled.img`
   max-width: 720px;
 `
 
-const DayCard = styled.div`
-  border-radius: 6px;
-  box-shadow: 12px 12px;
-`
+// const DayCard = styled.div`
+//   border-radius: 6px;
+//   box-shadow: 12px 12px;
+// `
 
 function App() {
   const currentCity = useStore($currentCity)
@@ -25,7 +25,7 @@ function App() {
     return () => {
       localStorage.setItem('currentCity', currentCity)
     }
-  }, [])
+  }, [currentCity])
   return (
     <div className="App">
       <Background src={dayImg} />

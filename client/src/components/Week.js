@@ -1,13 +1,17 @@
 import React from 'react'
-import { useStore } from 'effector-react'
+// import { useStore } from 'effector-react'
 import styled from 'styled-components'
 
 import Day from './Day'
 
 const StyledDiv = styled.div`
-  display: table;
+  display: flex;
   padding: 15px;
-  overflow-x: scroll;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `
 
 const Week = () => {

@@ -1,11 +1,15 @@
-import axios from 'axios'
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { useList, useStore } from 'effector-react'
 import { InlineIcon } from '@iconify/react'
 import celsiusIcon from '@iconify/icons-wi/celsius'
 
-import { $cities, $searchString, searchCityFx } from '../store'
+import {
+  $cities,
+  $searchString,
+  searchCityFx,
+  changeSearchString,
+} from '../store'
 
 const StyledLocation = styled.div`
   /* margin: -500px; */
@@ -50,22 +54,28 @@ const StyledTemperature = styled.span`
 const Search = () => {
   const searchString = useStore($searchString)
 
-  const findCity = async (val) => {
-    let token
-    if (token) {
-      token.cancel()
-    }
-    token = axios.CancelToken.source()
-    try {
-      await searchCityFx({ cityName: val })
-    } catch (e) {
-      if (axios.isCancel(e)) {
-        console.log('Request cancelled ', e.message)
-      } else {
-        console.log('Request cancelled ', e.message)
-      }
-    }
-  }
+  useEffect(() => {
+    ;(async () => {
+      await searchCityFx({ cityName: searchString })
+    })()
+  }, [searchString])
+
+  // const findCity = async (val) => {
+  //   let token
+  //   if (token) {
+  //     token.cancel()
+  //   }
+  //   token = axios.CancelToken.source()
+  //   try {
+  //     await searchCityFx({ cityName: val })
+  //   } catch (e) {
+  //     if (axios.isCancel(e)) {
+  //       console.log('Request cancelled ', e.message)
+  //     } else {
+  //       console.log('Request cancelled ', e.message)
+  //     }
+  //   }
+  // }
 
   const citiesList = useList($cities, (city) => (
     <StyledCity key={city.id}>
@@ -84,7 +94,7 @@ const Search = () => {
         placeholder="Find city..."
         onChange={(e) => {
           console.log('onchange search city e = ', e)
-          findCity(e.target.value)
+          changeSearchString(e.target.value)
         }}
       />
       <StyledList>{citiesList}</StyledList>
