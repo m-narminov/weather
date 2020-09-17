@@ -2,14 +2,14 @@ import { createStore, createEffect, createEvent } from 'effector'
 import axios from 'axios'
 
 const apiKey = '330216f9e3042b8a57a7865c3de67865'
-const weatherURL = 'https://api.openweathermap.org/data/2.5/weather'
+const weatherURL = 'https://api.openweathermap.org/data/2.5'
 
 export const appInit = createEvent('Init app')
 
 export const $searchMode = createStore(false)
 export const $currentCity = createStore('Minsk')
 export const $currentCityObject = createStore(null)
-export const $currentWeek = createStore([])
+export const $weekForecast = createStore([])
 export const $searchString = createStore('')
 export const $cancelToken = createStore(null)
 
@@ -63,7 +63,7 @@ export const searchCityFx = createEffect({
       setCancelToken(axios.CancelToken.source())
       try {
         const res = await axios.get(
-          `${weatherURL}?q=${cityName}&appid=${apiKey}&units=metric`,
+          `${weatherURL}/weather?q=${cityName}&appid=${apiKey}&units=metric`,
           { cancelToken: $cancelToken.getState() }
         )
         console.log('search city fx ', res.data)
@@ -85,12 +85,28 @@ export const getCityInfoFx = createEffect({
   handler: async () => {
     try {
       const res = await axios.get(
-        `${weatherURL}?q=${$currentCity.getState()}&appid=${apiKey}&units=metric`
+        `${weatherURL}/weather?q=${$currentCity.getState()}&appid=${apiKey}&units=metric`
       )
       console.log(res.data)
       return res.data
     } catch (error) {
-      console.error('get city info fx ', error.message)
+      console.error('[Get city info fx] ', error.message)
+    }
+  },
+})
+
+export const getExtendedForecastFx = createEffect({
+  handler: async () => {
+    try {
+      const latitude = $currentCityObject.getState().coord.lat
+      const logitude = $currentCityObject.getState().coord.lon
+      const res = await axios.get(
+        `${weatherURL}/onecall?lat=${latitude}&lon=${logitude}&appid=${apiKey}&units=metric&exclude=hourly,minutely,current`
+      )
+      console.log('one call res.data ', res.data)
+      return res.data
+    } catch (e) {
+      console.log('[Get extended forecast fx] ', e.message)
     }
   },
 })
@@ -138,6 +154,7 @@ $currentCityObject.on(getCityInfoFx.done, (_, { result }) => {
     daytime,
     sunrise,
     sunset,
+    coord: result.coord,
     country: result.sys.country,
     humidity: result.main.humidity,
     id: result.sys.id,
@@ -151,6 +168,12 @@ $currentCityObject.on(getCityInfoFx.done, (_, { result }) => {
     wind: result.wind.speed,
   }
 })
+
+$weekForecast.on(getExtendedForecastFx.done, (_, { result }) =>
+  result.daily.filter(
+    (day) => new Date().getDate() !== new Date(day.dt * 1000).getDate()
+  )
+)
 
 appInit.watch(() => {
   try {

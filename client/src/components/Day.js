@@ -31,7 +31,7 @@ import Temperature from './Temperature'
 
 const StyledDay = styled.div`
   display: inline-block;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   border-radius: 16px;
   background: #fff;
   box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);

@@ -1,8 +1,10 @@
 import React from 'react'
-// import { useStore } from 'effector-react'
+import { format } from 'date-fns'
+import { useList } from 'effector-react'
 import styled from 'styled-components'
 
 import Day from './Day'
+import { $weekForecast } from '../store'
 
 const StyledDiv = styled.div`
   display: flex;
@@ -17,13 +19,21 @@ const StyledDiv = styled.div`
 const Week = () => {
   return (
     <StyledDiv>
-      <Day title="Mon" date={14} max={25} min={18} />
-      <Day title="Tue" date={15} max={25} min={18} />
-      <Day title="Wed" date={16} max={25} min={18} />
-      <Day title="Thr" date={17} max={25} min={18} />
-      <Day title="Fri" date={18} max={25} min={18} />
-      <Day title="Sat" date={19} max={25} min={18} />
-      <Day title="Sun" date={20} max={25} min={18} />
+      {useList($weekForecast, (day) => {
+        const title = format(new Date(day.dt * 1000), 'EEE')
+        const date = format(new Date(day.dt * 1000), 'd')
+        const maxTemperature = day.temp.max
+        const minTemperature = day.temp.min
+
+        return (
+          <Day
+            title={title}
+            date={date}
+            max={maxTemperature}
+            min={minTemperature}
+          />
+        )
+      })}
     </StyledDiv>
   )
 }

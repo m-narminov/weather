@@ -12,7 +12,7 @@ const StyledHeader = styled.div`
   display: grid;
   grid-template-columns: 70% 30%;
   line-height: 48px;
-  padding: 0 8px;
+  font-size: 14px;
 `
 
 const Location = styled.div`
@@ -20,7 +20,12 @@ const Location = styled.div`
   font-weight: 500;
   font-size: 16px;
   background-color: rgba(13, 159, 234, 0.08);
-  border-radius: 20px 10px / 20px;
+  border-radius: 0 30px;
+
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
 `
 
 const Header = () => {

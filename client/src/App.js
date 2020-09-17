@@ -10,13 +10,7 @@ import Container from './components'
 const Background = styled.img`
   height: auto;
   width: 100%;
-  max-width: 720px;
 `
-
-// const DayCard = styled.div`
-//   border-radius: 6px;
-//   box-shadow: 12px 12px;
-// `
 
 function App() {
   const currentCity = useStore($currentCity)

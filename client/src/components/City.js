@@ -16,26 +16,54 @@ import timeIcon from '@iconify/icons-wi/time-8'
 
 import Week from './Week'
 import Header from './Header'
-import { $currentCityObject, getCityInfoFx } from '../store'
+import {
+  $currentCityObject,
+  getCityInfoFx,
+  getExtendedForecastFx,
+} from '../store'
+
+const TemperatureMain = styled.span`
+  font-weight: 300;
+  font-size: 64px;
+  line-height: 77px;
+`
+
+const Celsius = styled(InlineIcon)`
+  font-size: 24px;
+  line-height: 29px;
+  color: #666666;
+`
 
 const Info = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
+  justify-items: stretch;
 `
 
 const MiniCaption = styled.p`
+  margin-top: 4px;
   font-size: 12px;
 `
 
 const Cell = styled.div`
+  padding: 10px;
+  text-align: center;
+  display: grid;
+  align-items: center;
+  align-content: center;
+  white-space: nowrap;
   color: ${(props) => (props.main ? '#000' : '#444')};
 `
 
 const City = () => {
   const currentCityObject = useStore($currentCityObject)
   useEffect(() => {
-    getCityInfoFx()
+    async function getForecast() {
+      await getCityInfoFx()
+      await getExtendedForecastFx()
+    }
+    getForecast()
   }, [])
   console.log(`currentCityObject ${JSON.stringify(currentCityObject, null, 2)}`)
 
@@ -50,10 +78,8 @@ const City = () => {
           <div>{currentCityObject.weatherDescription}</div>
         </Cell>
         <Cell main>
-          <h1>
-            {currentCityObject.temperature}
-            <InlineIcon icon={celsiusIcon} />
-          </h1>
+          <TemperatureMain>{currentCityObject.temperature}</TemperatureMain>
+          <Celsius icon={celsiusIcon} />
         </Cell>
         <Cell>
           <div>
@@ -75,27 +101,37 @@ const City = () => {
           <MiniCaption>Humidity</MiniCaption>
         </Cell>
         <Cell>
-          <Icon icon={barometerIcon} />
+          <div>
+            <Icon icon={barometerIcon} />
+          </div>
           <div>{currentCityObject.pressure}&nbsp;mBar</div>
           <MiniCaption>Pressure</MiniCaption>
         </Cell>
         <Cell>
-          <Icon icon={windIcon} />
+          <div>
+            <Icon icon={windIcon} />
+          </div>
           <div>{currentCityObject.wind}&nbsp;m/s</div>
           <MiniCaption>Wind</MiniCaption>
         </Cell>
         <Cell>
-          <Icon icon={sunriseIcon} />
+          <div>
+            <Icon icon={sunriseIcon} />
+          </div>
           <div>{format(new Date(currentCityObject.sunrise), 'K:mm a')}</div>
           <MiniCaption>Sunrise</MiniCaption>
         </Cell>
         <Cell>
-          <Icon icon={sunsetIcon} />
+          <div>
+            <Icon icon={sunsetIcon} />
+          </div>
           <div>{format(new Date(currentCityObject.sunset), 'K:mm a')}</div>
           <MiniCaption>Sunset</MiniCaption>
         </Cell>
         <Cell>
-          <Icon icon={timeIcon} />
+          <div>
+            <Icon icon={timeIcon} />
+          </div>
           <div>{currentCityObject.daytime}</div>
           <MiniCaption>Daytime</MiniCaption>
         </Cell>
